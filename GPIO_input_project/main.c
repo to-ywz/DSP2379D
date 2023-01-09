@@ -50,12 +50,39 @@
 #include "driverlib.h"
 #include "device.h"
 
+void gpioInputCfg(void);
+
 //
 // Main
 //
 void main(void)
 {
+    Device_init();
 
+    gpioInputCfg();
+
+    while (1)
+    {
+        if (GPIO_readPin(24)){
+            DEVICE_DELAY_US(10000);;
+            if (GPIO_readPin(24))
+            {
+                GPIO_togglePin(31);
+            }
+        }
+    }
+}
+
+void gpioInputCfg(void)
+{
+    GPIO_setQualificationMode(24, GPIO_QUAL_6SAMPLE);
+    GPIO_setPinConfig(24);
+    GPIO_setDirectionMode(24, GPIO_DIR_MODE_IN);
+    GPIO_setPadConfig(24, GPIO_PIN_TYPE_PULLUP);
+
+    GPIO_setPinConfig(31);
+    GPIO_setDirectionMode(31, GPIO_DIR_MODE_OUT);
+    GPIO_setPadConfig(31, GPIO_PIN_TYPE_STD);
 }
 
 //
