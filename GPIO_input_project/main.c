@@ -75,10 +75,10 @@ void main(void)
 
 void gpioInputCfg(void)
 {
-    GPIO_setQualificationMode(24, GPIO_QUAL_6SAMPLE);
-    GPIO_setPinConfig(24);
-    GPIO_setDirectionMode(24, GPIO_DIR_MODE_IN);
-    GPIO_setPadConfig(24, GPIO_PIN_TYPE_PULLUP);
+    GPIO_setPinConfig(24);                              // 配置为GPIO模式
+    GPIO_setQualificationMode(24, GPIO_QUAL_3SAMPLE);   // 配置为 3倍采样
+    GPIO_setDirectionMode(24, GPIO_DIR_MODE_IN);        // 配置为输入模式
+    GPIO_setPadConfig(24, GPIO_PIN_TYPE_PULLUP);        // 配置为上拉模式
 
     GPIO_setPinConfig(31);
     GPIO_setDirectionMode(31, GPIO_DIR_MODE_OUT);
