@@ -73,7 +73,7 @@ void main(void)
             if (!GPIO_readPin(24))
             {// 确认引脚检测
                 GPIO_writePin(25, 0);   // 输出低电平
-                DEVICE_DELAY_US(1000L);
+                DEVICE_DELAY_US(1000L); //维持1ms
             }
         }
     }
