@@ -51,38 +51,56 @@
 #include "device.h"
 
 void gpioInputCfg(void);
+void test_function(uint8_t n);
 
 //
 // Main
 //
 void main(void)
 {
+    // 初始外设
     Device_init();
 
+    // 初始化 引脚
     gpioInputCfg();
 
     while (1)
     {
-        if (GPIO_readPin(24)){
-            DEVICE_DELAY_US(10000);;
-            if (GPIO_readPin(24))
-            {
-                GPIO_togglePin(31);
+        test_function(5);
+        if (!GPIO_readPin(24))
+        {// 引脚检测
+            DEVICE_DELAY_US(10 * 1000); // 消抖（暴力）
+            if (!GPIO_readPin(24))
+            {// 确认引脚检测
+                GPIO_writePin(25, 0);   // 输出低电平
+                DEVICE_DELAY_US(1000L);
             }
         }
     }
 }
 
+void test_function(uint8_t n)
+{
+    for (int i = 0; i < n*2; i++){
+        GPIO_togglePin(25); // 翻转电平
+        DEVICE_DELAY_US(100);
+    }
+}
+
+/**
+ * 配置 GPIO24 为
+ */
 void gpioInputCfg(void)
 {
     GPIO_setPinConfig(24);                              // 配置为GPIO模式
-    GPIO_setQualificationMode(24, GPIO_QUAL_3SAMPLE);   // 配置为 3倍采样
+    GPIO_setQualificationMode(24, GPIO_QUAL_SYNC);      // 配置为同步采样
     GPIO_setDirectionMode(24, GPIO_DIR_MODE_IN);        // 配置为输入模式
     GPIO_setPadConfig(24, GPIO_PIN_TYPE_PULLUP);        // 配置为上拉模式
 
-    GPIO_setPinConfig(31);
-    GPIO_setDirectionMode(31, GPIO_DIR_MODE_OUT);
-    GPIO_setPadConfig(31, GPIO_PIN_TYPE_STD);
+    // 配置为输出模式
+    GPIO_setPinConfig(25);
+    GPIO_setDirectionMode(25, GPIO_DIR_MODE_OUT);
+    GPIO_setPadConfig(25, GPIO_PIN_TYPE_STD);
 }
 
 //
